@@ -6,6 +6,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class CustomizeConfig extends WebMvcConfigurerAdapter {
 
@@ -27,7 +30,6 @@ public class CustomizeConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/hello").setViewName("hello");
-        registry.addViewController("login").setViewName("login");
         super.addViewControllers(registry);
     }
 }

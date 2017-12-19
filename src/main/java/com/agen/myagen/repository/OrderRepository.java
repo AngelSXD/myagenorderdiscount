@@ -12,4 +12,5 @@ public interface OrderRepository  extends JpaRepository<XxOrder,Integer> {
 
     @Override
     XxOrder findOne(Integer integer);
+
 }
