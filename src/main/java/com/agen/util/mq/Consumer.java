@@ -1,5 +1,6 @@
 package com.agen.util.mq;
 
+import com.agen.myagen.entity.XxMember;
 import com.agen.myagen.entity.XxOrder;
 import com.agen.myagen.repository.OrderRepository;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 
 /**
@@ -39,6 +41,8 @@ public class Consumer {
                 try{
                     Integer orderID = Integer.parseInt(orderId);
                     XxOrder order = orderRepository.findOne(orderID);
+                    XxMember member = order.getXxMemberByMember();
+                    Objects.nonNull(member);
                 }catch (Exception e){
                     System.out.println("订单ID有误");
                     logger.debug("MQ消息队列取出订单ID转化失败\r\n"+e.getMessage());

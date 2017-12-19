@@ -36,12 +36,12 @@ public class Discount {
      * 机构ID
      */
     @Column(nullable = false)
-    private Long adminId;
+    private Integer adminId;
     /**
      * 产品ID
      */
     @Column(nullable = false)
-    private Long productId;
+    private Integer productId;
     /**
      * 产品价格
      */

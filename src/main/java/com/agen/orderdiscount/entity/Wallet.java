@@ -37,7 +37,7 @@ public class Wallet {
      * 机构ID
      */
     @Column(nullable = false)
-    private Long adminId;
+    private Integer adminId;
     /**
      * 预估金额
      */

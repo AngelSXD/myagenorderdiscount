@@ -41,7 +41,12 @@ public class Available {
      * 订单ID
      */
     @Column(nullable = false)
-    private Long orderId;
+    private Integer orderId;
+    /**
+     * 订单编号SN
+     */
+    @Column(nullable = false,length = 20)
+    private String orderSn;
     /**
      * 流水金额
      */
