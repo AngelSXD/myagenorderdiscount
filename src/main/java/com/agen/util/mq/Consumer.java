@@ -1,15 +1,14 @@
 package com.agen.util.mq;
 
-import com.agen.myagen.entity.XxMember;
-import com.agen.myagen.entity.XxOrder;
-import com.agen.myagen.repository.OrderRepository;
+
+import com.agen.util.threadPool.AsyncTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Objects;
+
 
 
 /**
@@ -21,38 +20,19 @@ import java.util.Objects;
 public class Consumer {
 
     @Resource
-    OrderRepository orderRepository;
+    private AsyncTaskService asyncTaskService;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @JmsListener(destination = "order.queue")
     public void receive(String orderId){
         System.out.println("MQ取到orderID："+orderId);
-        Runnable runnable = dealOrder(orderId);
-        runnable.run();
+        /**
+         * MQ中取出订单ID后，开启多线程单独进行处理
+         */
+        asyncTaskService.executeAsyncTask(orderId);
     }
 
 
-    public Runnable dealOrder(String orderId){
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
 
-                try{
-                    Integer orderID = Integer.parseInt(orderId);
-                    XxOrder order = orderRepository.findOne(orderID);
-                    XxMember member = order.getXxMemberByMember();
-                    Objects.nonNull(member);
-                }catch (Exception e){
-                    System.out.println("订单ID有误");
-                    logger.debug("MQ消息队列取出订单ID转化失败\r\n"+e.getMessage());
-                }
-
-
-
-            }
-        };
-
-        return runnable;
-    }
 }
