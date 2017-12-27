@@ -1,14 +1,16 @@
 package com.agen.myagen.repository;
 
-import com.agen.myagen.entity.XxAdmin;
 import com.agen.myagen.entity.XxOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 
+/**
+ *  Order持久化层
+ *
+ * @author SXD
+ * @date 2017/12/26
+ */
 public interface OrderRepository  extends JpaRepository<XxOrder,Integer> {
-
-    List<XxOrder> findTop10ByXxAdminByOperator(XxAdmin xxAdminByOperator);
 
     @Override
     XxOrder findOne(Integer integer);

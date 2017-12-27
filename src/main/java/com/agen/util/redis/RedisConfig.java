@@ -1,9 +1,11 @@
 package com.agen.util.redis;
 
+import com.agen.myagen.entity.XxAdmin;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -57,6 +59,26 @@ public class RedisConfig extends CachingConfigurerSupport {
             public Object generate(Object target, Method method, Object... params) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(method.getName());
+                return sb.toString();
+            }
+        };
+    }
+
+    /**
+     * 生成key的策略【自定义第三种】
+     * 使用范围：仅适用于选取第一个参数做键的情况
+     * 由于reposotory上不能直接使用spel表达式作key，故而采用key的生成策略的方式来替换
+     *
+     * 使用时在注解@Cacheable(value = "admins",keyGenerator = "firstParamKeyGenerator")中指定
+     * @return
+     */
+    @Bean(name = "firstParamKeyGenerator")
+    public KeyGenerator firstParamKeyGenerator(){
+        return new KeyGenerator() {
+            @Override
+            public Object generate(Object target, Method method, Object... params) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(params[0].toString());
                 return sb.toString();
             }
         };

@@ -50,7 +50,7 @@ public class AsyncTaskService {
         }catch (Exception e){
             String errorMsg = "处理MQ队列取出OrderId处理异常："+e;
             System.out.println(errorMsg);
-            logger.debug(errorMsg);
+            logger.error(errorMsg);
             //若处理失败，则需要对订单ID进行记录，并进行后续的处理，是否需要重新校准订单状态和报告状态 或者做别的事情
         }
 

@@ -24,7 +24,6 @@ public class AdminController {
     @ResponseBody
     public XxAdmin getAdmin(){
         XxAdmin admin = null;
-        System.out.println("doSome");
         return  admin;
     }
 }
