@@ -48,8 +48,13 @@ public class AsyncTaskService {
             }
 
         }catch (Exception e){
-            String errorMsg = "处理MQ队列取出OrderId处理异常："+e;
-            System.out.println(errorMsg);
+            StackTraceElement stackTraceElement = e.getStackTrace()[0];
+            String errorMsg = "文件名："+stackTraceElement.getFileName()+
+                    "\r\n类名："+stackTraceElement.getClassName()+
+                    "\r\n方法名："+stackTraceElement.getMethodName()+
+                    "\r\n抛出异常行号："+stackTraceElement.getLineNumber()+
+                    "\r\n处理MQ队列取出OrderId处理异常："+e;
+
             logger.error(errorMsg);
             //若处理失败，则需要对订单ID进行记录，并进行后续的处理，是否需要重新校准订单状态和报告状态 或者做别的事情
         }
