@@ -24,6 +24,15 @@
         h1 {
             font-family: Lobster, Monospace;
         }
+        u,small{
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient:vertical;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +89,22 @@
     </nav><!-- sidebar-wrapper  -->
     <main class="page-content">
         <div class="container-fluid">
+            <header class="htmleaf-header">
+                <h1>Myagen-Super's DicountManage <span>Administrator-specific Features</span></h1>
+                <div class="container-fluid" >
+                    <div class="row">
+                        测试使用页面
+                    </div>
+                </div>
+            </header>
 
+            <h3 class="text-center">点击左上角的 <i class="fa fa-bars"></i> 按钮更多功能操作</h3>
+
+            <footer class="htmleaf-footer">
+                <div class="row">
+                    <h3 class="text-center">技术支持：@Angel<span class="hidden-xs hidden-sm">&nbsp;&nbsp;http://www.cnblogs.com/sxdcgaq8080</span></h3>
+                </div>
+            </footer>
         </div>
     </main><!-- page-content" -->
 </div><!-- page-wrapper -->
@@ -90,6 +114,6 @@
 <script src="static/bootstrap/js/bootstrap.min.js"></script>
 <script src="static/js/index/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="static/js/index/custom.js"></script>
-<script src="static/js/index/index.js"></script>
+
 </body>
 </html>
