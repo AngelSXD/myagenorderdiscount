@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * admin持久化层
- *
+ * 基因网机构 持久化层
  * @author SXD
  * @date 2017/12/26
  */
