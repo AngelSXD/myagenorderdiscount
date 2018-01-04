@@ -88,8 +88,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+		<!--AngelKey加密-->
+		<dependency>
+			<groupId>sxd.jar</groupId>
+			<artifactId>AngelKey</artifactId>
+			<version>1.1</version>
+		</dependency>
 
-	</dependencies>
+
+    </dependencies>
 
 	<!--开启热部署-->
 	<build>
