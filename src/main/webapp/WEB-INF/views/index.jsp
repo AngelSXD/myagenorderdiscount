@@ -29,11 +29,14 @@
         .in{
             z-index: -1;
         }
+        .ove{
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
 <div class="page-wrapper">
-    <nav id="sidebar" class="sidebar-wrapper">
+    <nav id="sidebar" class="sidebar-wrapper ove">
         <div class="sidebar-content">
             <a href="#" id="toggle-sidebar"><i class="fa fa-bars"></i></a>
             <div class="sidebar-brand">
@@ -94,9 +97,7 @@
         </div><!-- sidebar-content  -->
 
         <div class="sidebar-footer">
-            <a href="#"><i class="fa fa-bell"></i><span class="label label-warning notification">3</span></a>
-            <a href="#"><i class="fa fa-envelope"></i><span class="label label-success notification">7</span></a>
-            <a href="#"><i class="fa fa-gear"></i></a>
+            <a href="#"><i class="fa fa-home"></i></a>
             <a href="#"><i class="fa fa-power-off"></i></a>
         </div>
     </nav><!-- sidebar-wrapper  -->
