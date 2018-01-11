@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * 折扣
@@ -50,13 +51,18 @@ public class Discount {
     /**
      * 产品折扣率
      */
-    @Column(nullable = false,precision = 4,scale = 2)
+    @Column(precision = 4,scale = 2)
     private Double priceDiscount;
     /**
      * 产品折扣价钱
      */
     @Column(nullable = false,precision = 10,scale = 2)
     private Double dicountPrice;
+    /**
+     *操作时间
+     */
+    @Column(nullable = false)
+    private Date editDate;
     /**
      * 折扣备注1
      */
@@ -67,6 +73,16 @@ public class Discount {
      */
     @Column(length = 500)
     private String disCre2;
+    /**
+     * 机构名称
+     */
+    @Column(length = 100)
+    private String adminName;
+    /**
+     * 产品名称
+     */
+    @Column(length = 100)
+    private String productName;
 
 
 }

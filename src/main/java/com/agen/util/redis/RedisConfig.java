@@ -66,7 +66,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 生成key的策略【自定义第三种】
-     * 使用范围：仅适用于选取第一个参数做键的情况
+     * 使用范围：仅适用于选取方法名+第一个参数做键的情况
      * 由于reposotory上不能直接使用spel表达式作key，故而采用key的生成策略的方式来替换
      *
      * 使用时在注解@Cacheable(value = "admins",keyGenerator = "firstParamKeyGenerator")中指定
@@ -78,6 +78,7 @@ public class RedisConfig extends CachingConfigurerSupport {
             @Override
             public Object generate(Object target, Method method, Object... params) {
                 StringBuilder sb = new StringBuilder();
+                sb.append(method.getName()+"~");
                 sb.append(params[0].toString());
                 return sb.toString();
             }
@@ -94,6 +95,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         //按需求设置自己需要的    缓存名字 和 对应的失效时间
         //可以不要
         Map<String,Long> map = new HashMap<>();
+        map.put("24h",3600*24L);
         map.put("12h",3600*12L);
         map.put("12m",60*12L);
         map.put("12s",12L);

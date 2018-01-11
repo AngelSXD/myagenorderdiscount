@@ -1,10 +1,20 @@
 package com.agen.controller;
 
 import com.agen.myagen.entity.XxAdmin;
-import com.agen.myagen.entity.XxMember;
+import com.agen.myagen.entity.XxProduct;
+import com.agen.myagen.repository.AdminRepository;
+import com.agen.myagen.repository.ProductRepository;
+import com.agen.orderdiscount.entity.Discount;
 import com.agen.orderdiscount.entity.User;
+import com.agen.orderdiscount.repository.DiscountRepository;
 import com.agen.orderdiscount.repository.UserRepository;
 import com.sxd.util.AngelEncryption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 管理员Controller
@@ -30,7 +40,18 @@ public class AdminController {
     @Resource
     private UserRepository userRepository;
 
+    @Resource
+    private AdminRepository adminRepository;
+
+    @Resource
+    private ProductRepository productRepository;
+
+    @Resource
+    private DiscountRepository discountRepository;
+
     private AngelEncryption angelEncryption = new AngelEncryption();
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     /**
@@ -163,5 +184,77 @@ public class AdminController {
         }
 
     }
+
+    @RequestMapping("allAdmins")
+    @ResponseBody
+    public List<XxAdmin> allAdmins(){
+        List<XxAdmin> allAdmins = adminRepository.findAllAdmins();
+        return allAdmins;
+    }
+
+    @RequestMapping("allProducts")
+    @ResponseBody
+    public List<XxProduct> allProducts(){
+        List<XxProduct> allProducts = productRepository.findAllProducts();
+        return  allProducts;
+    }
+
+
+    @RequestMapping("editDiscount")
+    @ResponseBody
+    public List<Discount> editDiscount(String adminIds,String productIds,Double productPrice,Double dicountPrice,Double priceDiscount,String express,Model model){
+        String [] adminArr =  adminIds.split(",");
+        String [] productArr = productIds.split(",");
+        //仅将已存在的对象返回 用于警告 新保存的不用返回，前台ajax仅去查询最新10条即可
+        List<Discount> list = new ArrayList<>();
+        if(adminArr.length > 0 && productArr.length > 0){
+            for (String adminId : adminArr) {
+                for (String productId : productArr) {
+                    Discount discount = discountRepository.findDiscountByAdminIdAndProductId(Integer.parseInt(adminId),Integer.parseInt(productId));
+                    if(Objects.nonNull(discount)){
+                        discount.setDisCre2("exist");
+                        list.add(discount);
+                    }else{
+                        Discount discount1 = new Discount();
+                        discount1.setDiscountId(UUID.randomUUID().toString());
+                        discount1.setAdminId(Integer.parseInt(adminId));
+                        discount1.setProductId(Integer.parseInt(productId));
+                        discount1.setProductPrice(productPrice);
+                        discount1.setDicountPrice(dicountPrice);
+                        discount1.setPriceDiscount(priceDiscount);
+                        discount1.setEditDate(new Date());
+                        discount1.setDisCre1(express);
+                        try{
+                            discount1.setAdminName(adminRepository.findXxAdminById(Integer.parseInt(adminId)).getName());
+                            discount1.setProductName(productRepository.findXxProductById(Integer.parseInt(productId)).getFullName());
+                            Discount discount2 = discountRepository.save(discount1);
+                            if(Objects.isNull(discount2)){
+                                discount1.setDisCre2("error");
+                                list.add(discount1);
+                            }
+                        }catch (Exception e){
+                            logger.error("存入折扣时，查询机构名称和产品名称异常\r\n"+e);
+                        }
+                    }
+                }
+            }
+        }
+        if(list.size() == 0){
+            return null;
+        }else{
+            return list;
+        }
+    }
+
+
+    @RequestMapping("allDiscount")
+    @ResponseBody
+    public Page<Discount> allDiscount(int pageNumber,int pageSize){
+        Sort sort = new Sort(Sort.Direction.DESC,"editDate");
+        Pageable pageable = new PageRequest(pageNumber,pageSize,sort);
+        Page<Discount> page = discountRepository.findAll(pageable);
+        return  page;
+    }
+
 
 }

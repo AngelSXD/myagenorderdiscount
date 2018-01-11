@@ -78,7 +78,7 @@ public class MainController {
     public String getOrder(String adminId,Model model){
         try{
             Integer adminID = Integer.parseInt(adminId);
-            XxAdmin admin = adminRepository.findOne(adminID);
+            XxAdmin admin = adminRepository.findXxAdminById(adminID);
             model.addAttribute("admin",admin);
         }catch (Exception e){
             StackTraceElement stackTraceElement = e.getStackTrace()[0];
