@@ -108,8 +108,70 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary editClear">清除</button>
+                        <button type="button" class="btn btn-warning editClear">清除</button>
                         <button type="button" class="btn btn-primary editSubmit">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-8 col-lg-offset-2 col-sm-12 col-md-12 col-xs-12">
+        <div class="modal fade modalIndex" id="detailModal"  role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-warning">机构-产品折扣信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal"  method="post">
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label text-danger">机构名称*</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="discountId" class="expc">
+                                    <input type="hidden" name="adminId" class="expc">
+                                    <input type="text" class="form-control expc" name="adminName" placeholder="" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label text-danger">产品名称*</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="productId" class="expc">
+                                    <input type="text" class="form-control expc" name="productName" placeholder="" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label text-danger">产品价格*</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="productPrice" placeholder="￥【必填】">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">折扣表达式</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="express" placeholder="折扣表达式" role="折扣表达式  仅留入口，后续开发可以编写处理规则">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">折扣率</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="priceDiscount" placeholder="0~1" role="折扣率 非必填项 若填写则可以直接计算出折扣价格">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label text-danger">折扣价格*</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="dicountPrice" placeholder="￥【必填】">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-warning updateClear">清除</button>
+                        <button type="button" class="btn btn-danger updateDetele">删除</button>
+                        <button type="button" class="btn btn-primary updateSubmit">确认</button>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ import com.agen.orderdiscount.entity.Discount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * discount 折扣持久化层
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author SXD
  * @date 2018/1/8
  */
-public interface DiscountRepository extends JpaRepository<Discount,String>{
+public interface DiscountRepository extends JpaRepository<Discount,String>,JpaSpecificationExecutor<Discount> {
 
     /**
      * 根据 adminId 和 productId 查找折扣
@@ -24,4 +25,5 @@ public interface DiscountRepository extends JpaRepository<Discount,String>{
 
     @Override
     Page<Discount> findAll(Pageable pageable);
+
 }

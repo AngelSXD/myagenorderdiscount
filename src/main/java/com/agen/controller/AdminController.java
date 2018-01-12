@@ -15,17 +15,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 管理员Controller
@@ -256,5 +259,78 @@ public class AdminController {
         return  page;
     }
 
+    @RequestMapping("queryDiscount")
+    @ResponseBody
+    public Page<Discount> queryDiscount(int pageNumber,int pageSize,String adminIds,String productIds){
+
+        List<Integer> adminArr = getIntArr(adminIds);
+        List<Integer> productArr = getIntArr(productIds);
+        Pageable pageable = new PageRequest(pageNumber,pageSize);
+
+        Page<Discount> discountList = discountRepository.findAll(new Specification<Discount>() {
+            @Override
+            public Predicate toPredicate(Root<Discount> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list = new ArrayList<>();
+                if(!adminArr.isEmpty()){
+                    list.add(root.get("adminId").in(adminArr));
+                }
+                if(!productArr.isEmpty()){
+                    list.add(root.get("productId").in(productArr));
+                }
+                criteriaQuery.orderBy(criteriaBuilder.desc(root.get("editDate")));
+
+                Predicate[] predicates = new Predicate[list.size()];
+                predicates = list.toArray(predicates);
+                return criteriaBuilder.and(predicates);
+            }
+        },pageable);
+
+        return discountList;
+    }
+
+
+    public List<Integer> getIntArr(String str){
+        if(Objects.nonNull(str) && str.length()>0){
+            List<Integer> adminArr =  Arrays.stream(str.split(",")).map(s->Integer.valueOf(s)).collect(Collectors.toList());
+            return  adminArr;
+        }else{
+            return new ArrayList<>();
+        }
+
+    }
+
+
+    @RequestMapping("deleteDiscount")
+    @ResponseBody
+    public String deleteDiscount(String discountId){
+        Discount discount = discountRepository.findOne(discountId);
+        try {
+            discountRepository.delete(discount);
+            return "【机构】："+discount.getAdminName()+">>【产品】："+discount.getProductName()+"折扣信息删除成功";
+        }catch (Exception e){
+            logger.error("discountId=("+discountId+")删除失败！\r\n"+e);
+            return "【机构】："+discount.getAdminName()+">>【产品】："+discount.getProductName()+"折扣信息删除失败";
+        }
+
+    }
+
+    @RequestMapping("updateDiscount")
+    @ResponseBody
+    public String updateDiscount(String discountId,Double productPrice,String express,Double priceDiscount,Double dicountPrice ){
+        Discount discount = discountRepository.findOne(discountId);
+        if(Objects.nonNull(discount)){
+            discount.setProductPrice(productPrice);
+            discount.setDisCre1(express);
+            discount.setPriceDiscount(priceDiscount);
+            discount.setDicountPrice(dicountPrice);
+            discount.setEditDate(new Date());
+            Discount discount1 = discountRepository.saveAndFlush(discount);
+            if(Objects.nonNull(discount1)){
+                return "【机构】："+discount.getAdminName()+">>【产品】："+discount.getProductName()+"折扣信息更新成功";
+            }
+        }
+
+        return "【机构】："+discount.getAdminName()+">>【产品】："+discount.getProductName()+"折扣信息更新失败";
+    }
 
 }

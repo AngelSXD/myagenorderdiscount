@@ -1,8 +1,17 @@
-function get10Disocount(){
-    $.ajax({url:"admin/allDiscount",
+function get10Disocount(flag){
+
+    var json = new Object();
+    json.pageNumber = $("input[name='pageNumber']").val();
+    json.pageSize = $("input[name='pageSize']").val();
+    if(flag == "query"){
+        json.adminIds = $(".checkedAdminIds").val();
+        json.productIds = $(".checkedProductIds").val();
+    }
+
+    $.ajax({url:"admin/queryDiscount",
         type:"post",
         traditional:true,
-        data:{pageNumber:$("input[name='pageNumber']").val(),pageSize:$("input[name='pageSize']").val()},
+        data:json,
         success:function(data){
             if(data != null){
                 var temp = "";
@@ -47,6 +56,49 @@ function get10Disocount(){
 
                 $('.detail .begon').children(".moreDetail").before(temp);
 
+                //================================每条信息点击js相关=======================================
+                var al = $('.detail .begon').children().not(".moreDetail").children(".alert");
+                $(al).click(function(){
+                    var adminId = $(this).find("input[name='adminId']").val();
+                    var adminName = $(this).find("u[name='adminName']").text();
+                    var productId = $(this).find("input[name='productId']").val();
+                    var productName = $(this).find("small[name='productName']").text();
+                    var detail = $(this).find("input[name='detailed']").val();
+                    var dicountPrice = $(this).find("small em").text();
+                    var discountId = "";
+                    var productPrice = "";
+                    var priceDiscount = "";
+                    var express = "";
+                    var arr = new Array();
+                    arr = detail.split("~");
+                    for(var i = 0; i<arr.length ; i++){
+                        if(i==0){
+                            discountId = arr[i];
+                        }
+                        if(i == 1){
+                            productPrice = arr[i];
+                        }
+                        if(i == 2){
+                            priceDiscount = arr[i];
+                        }
+                        if(i == 3){
+                            express = arr[i];
+                        }
+                    }
+
+                    $("#detailModal input[name='discountId']").val(discountId);
+                    $("#detailModal input[name='adminId']").val(adminId);
+                    $("#detailModal input[name='adminName']").val(adminName);
+                    $("#detailModal input[name='productId']").val(productId);
+                    $("#detailModal input[name='productName']").val(productName);
+                    $("#detailModal input[name='productPrice']").val(productPrice);
+                    $("#detailModal input[name='express']").val(express);
+                    $("#detailModal input[name='priceDiscount']").val(priceDiscount);
+                    $("#detailModal input[name='dicountPrice']").val(dicountPrice);
+
+                    $('#detailModal').modal("show");
+                });
+
             }else{
                 $(".moreDetail u").text("暂无数据");
             }
@@ -62,7 +114,7 @@ $("document").ready(function(){
     $(".moreDetail,.moreDetail u").click(function(){
         var flag = $(".moreDetail u").text();
         if(flag != "暂无数据" && flag != "人家也是有底线的"){
-            get10Disocount();
+            get10Disocount("query");
         }
 
     });
@@ -174,21 +226,22 @@ $("document").ready(function(){
      * 填写了 折扣率的话 可以直接计算 本机构+本产品的折扣价格
      */
     $("input[name='priceDiscount']").blur(function(){
+
         //产品价格
-        var productPrice = $("input[name='productPrice']").val();
+        var productPrice = $(this).parents("form").find("input[name='productPrice']").val();
         if(productPrice == ""){
-            $("input[name='priceDiscount']").val("");
+            $(this).val("");
             alert("产品价格未填写，无法计算折扣率");
             return false;
         }else{
-            var priceDiscount = $("input[name='priceDiscount']").val();
+            var priceDiscount = $(this).parents("form").find("input[name='priceDiscount']").val();
             if(parseFloat(priceDiscount)>1 || parseFloat(priceDiscount)<0){
-                $("input[name='priceDiscount']").val("");
+                $(this).val("");
                 alert("产品折扣率范围0~1之间，超出范围");
                 return false;
             }else{
                 var dicountPrice = parseFloat(priceDiscount)*parseFloat(productPrice);
-                $("input[name='dicountPrice']").val(dicountPrice);
+                $(this).parents("form").find("input[name='dicountPrice']").val(dicountPrice.toFixed(4));
             }
         }
     });
@@ -298,14 +351,78 @@ $("document").ready(function(){
         }
     });
 
+//================================每条详细信息 modal js相关=======================================
+    /**
+     * 机构-产品 折扣清除按钮
+     */
+    $(".updateClear").click(function(){
+        $("form input:not(.expc)").val("");
+    });
 
+    /**
+     *机构-产品 删除按钮
+     */
+    $(".updateDetele").click(function(){
+        var discountId = $('#detailModal').find("input[name='discountId']").val();
+        $.ajax({url:"admin/deleteDiscount",
+            type:"post",
+            traditional:true,
+            async:false,
+            data:{discountId:discountId},
+            success:function(data){
+                $('#detailModal').modal('hide');
+                if(data.indexOf("失败")>0){
+                    notifyMsgError(data);
+                }
+                if(data.indexOf("成功")>0){
+                    notifyMsgSuccess(data);
+                    $('.detail .begon').children().not(".moreDetail").remove();
+                    get10Disocount("query");
+                }
+
+                return;
+            }
+        });
+    });
+
+    /**
+     * 机构-产品 更新 确认提交按钮
+     */
+    $(".updateSubmit").click(function(){
+        var formDatas = $("#detailModal form").serialize();
+        $.ajax({url:"admin/updateDiscount",
+            type:"post",
+            traditional:true,
+            async:false,
+            data:formDatas,
+            success:function(data){
+                $('#detailModal').modal('hide');
+                if(data.indexOf("失败")>0){
+                    notifyMsgError(data);
+                }
+                if(data.indexOf("成功")>0){
+                    notifyMsgSuccess(data);
+                    $('.detail .begon').children().not(".moreDetail").remove();
+                    get10Disocount("query");
+                }
+                return;
+            }
+        });
+    });
 
 
 //================================查询按钮js相关=======================================
 
     $(".seachA").click(function(){
-
+        $('.detail .begon').children().not(".moreDetail").remove();
+        $(".moreDetail u").text("...加载更多...");
+        $("input[name='pageNumber']").val("0");
+        $("input[name='pageSize']").val("10");
+        get10Disocount("query");
     });
+
+
+
 
 
 //===============================调用函数=============================================
@@ -363,6 +480,42 @@ $("document").ready(function(){
             element: 'body',
             position: null,
             type: "danger",
+            allow_dismiss: true,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: {
+                from: "bottom",
+                align: "center"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 5000,
+            timer: 1000,
+            url_target: '_blank'
+        });
+
+        return notify;
+    }
+
+
+    /**
+     * bootstrap 通知提醒 使用 成功框
+     * @param msg
+     * @returns {*}
+     */
+    function notifyMsgSuccess(msg){
+        var notify =  $.notify({
+            // options
+            icon: 'glyphicon glyphicon-ok-sign',
+            title: '',
+            message: msg,
+            target: '_blank'
+        },{
+            // settings
+            element: 'body',
+            position: null,
+            type: "success",
             allow_dismiss: true,
             newest_on_top: true,
             showProgressbar: false,
