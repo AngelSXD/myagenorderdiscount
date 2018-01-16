@@ -72,6 +72,7 @@ public class XxProduct {
     private Boolean isWjEnabled;
     private String guid;
     private String belong;
+    private int productCategory;
 
     @Id
     @Column(name = "id", nullable = false, precision = 0)
@@ -888,5 +889,15 @@ public class XxProduct {
         result = 31 * result + (guid != null ? guid.hashCode() : 0);
         result = 31 * result + (belong != null ? belong.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "product_category", nullable = false, precision = 0)
+    public int getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(int productCategory) {
+        this.productCategory = productCategory;
     }
 }

@@ -45,26 +45,20 @@ $(document).ready(function(){
     });
 
 
-    //预估金额
-    $.ajax({url:"../wallet/esAmount",
+    //钱包信息
+    $.ajax({url:"../wallet/getWallet",
         type:"post",
         dataType:'json',
         traditional:true,
+        data:{adminId:$(".adminId").text()},
         success:function(data){
-            $(".esAmount").text(data);
+            if(data != null){
+                $(".esAmount").text(data.esAmount);
+                $(".avAmount").text(data.avAmount);
+            }
+            return ;
         }
     });
-
-    //可提现金额
-    $.ajax({url:"../wallet/avAmount",
-        type:"post",
-        dataType:'json',
-        traditional:true,
-        success:function(data){
-            $(".avAmount").text(data);
-        }
-    });
-
 
 
 });

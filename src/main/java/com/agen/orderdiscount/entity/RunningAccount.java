@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  * 流水账单
+ * 请求提现以后，被记录在流水账单
  * @author SXD
- * @date 2017/12/15
+ * @date 2018/1/16
  */
 @Data(staticConstructor = "of")
 @NoArgsConstructor
@@ -46,28 +47,30 @@ public class RunningAccount {
     @Column(nullable = false)
     private Date raDate;
     /**
-     * 流水状态
+     * 流水账单 状态
+     * 1    请求提现
+     * 2    通过提现请求，提现成功
+     * 3    拒绝提现请求，提现失败
+     * 4    通过部分提现请求中的订单，拒绝部分提现请求中的订单
+     *
      */
-    @Column(nullable = false,length = 20)
-    private String raStatues;
+    @Column(nullable = false)
+    private Integer accountStatus;
     /**
      * 操作来源
      */
     @Column(nullable = false,length = 20)
     private String raOperater;
-
     /**
-     * 交易凭证
-     * 还未开发 和支付宝微信对接
-     * 后期开发 需要设置为nullable = false
-     */
-    @Column(length = 100)
-    private String certificate;
-    /**
-     * 流水备注
+     * 流水备注1
      */
     @Column(length = 500)
-    private String ratCre;
+    private String ratCre1;
+    /**
+     * 流水备注2
+     */
+    @Column(length = 500)
+    private String ratCre2;
 
     /**
      * 关联子集流水账单
@@ -77,10 +80,8 @@ public class RunningAccount {
      * 这里还有注意OneToMany默认的加载方式是赖加载。当看到设置关系中最后一个单词是Many，那么该加载默认为懒加载
      */
     @OneToMany(cascade = {CascadeType.REFRESH,CascadeType.MERGE},mappedBy = "parentRa",fetch = FetchType.EAGER)
-    private List<Available> childAvailables;
+    private List<AvAmount> childAvamounts;
 
-    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
-    @JoinColumn(name="accountType1")
-    private AccountType accountType1;
+
 
 }

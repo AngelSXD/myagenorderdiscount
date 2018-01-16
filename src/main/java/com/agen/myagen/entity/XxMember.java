@@ -56,7 +56,7 @@ public class XxMember {
     private Boolean isConfirm;
     private String wxaccount;
     private String bankCardNumber;
-
+    private Integer institutions;
 
     @Id
     @Column(name = "id", nullable = false, precision = 0)
@@ -677,5 +677,13 @@ public class XxMember {
         return result;
     }
 
+    @Basic
+    @Column(name = "institutions", nullable = true, precision = 0)
+    public Integer getInstitutions() {
+        return institutions;
+    }
 
+    public void setInstitutions(Integer institutions) {
+        this.institutions = institutions;
+    }
 }

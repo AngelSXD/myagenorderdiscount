@@ -42,6 +42,7 @@ public class TMemberCyb {
     private String diagnosis;
     private String sampleType;
     private String sendHospital;
+    private Integer hzjgId;
 
     @Id
     @Column(name = "id", nullable = false, precision = 0)
@@ -495,4 +496,16 @@ public class TMemberCyb {
         result = 31 * result + (sendHospital != null ? sendHospital.hashCode() : 0);
         return result;
     }
+
+    @Basic
+    @Column(name = "hzjg_id", nullable = true, precision = 0)
+    public Integer getHzjgId() {
+        return hzjgId;
+    }
+
+    public void setHzjgId(Integer hzjgId) {
+        this.hzjgId = hzjgId;
+    }
+
+
 }

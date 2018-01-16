@@ -23,6 +23,10 @@ public class TBg {
     private Integer infoId;
     private Boolean isPz;
     private Timestamp pzDate;
+    private Integer memberId;
+    private Integer cybId;
+    private int orderId;
+    private Integer productId;
 
     @Id
     @Column(name = "id", nullable = false, precision = 0)
@@ -242,5 +246,45 @@ public class TBg {
         result = 31 * result + (isPz != null ? isPz.hashCode() : 0);
         result = 31 * result + (pzDate != null ? pzDate.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "member_id", nullable = true, precision = 0)
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
+    }
+
+    @Basic
+    @Column(name = "cyb_id", nullable = true, precision = 0)
+    public Integer getCybId() {
+        return cybId;
+    }
+
+    public void setCybId(Integer cybId) {
+        this.cybId = cybId;
+    }
+
+    @Basic
+    @Column(name = "order_id", nullable = false, precision = 0)
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    @Basic
+    @Column(name = "product_id", nullable = true, precision = 0)
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 }

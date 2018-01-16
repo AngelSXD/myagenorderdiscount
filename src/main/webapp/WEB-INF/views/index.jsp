@@ -85,9 +85,8 @@
                         <a href="#"><i class="fa fa-diamond"></i><span>个人中心</span></a>
                         <div class="sidebar-submenu">
                             <ul>
-                                <li><a href="#" class="sub">基本信息</a></li>
-                                <li><a href="#">提现历史</a></li>
-                                <li><a href="#">订单历史</a></li>
+                                <li><a href="#" class="orderHistory">订单历史</a></li>
+                                <li><a href="#" class="discountHistory">提现历史</a></li>
                             </ul>
                         </div>
                     </li>
@@ -113,7 +112,7 @@
                                 <div class="row  text-center text-muted">
                                     <strong>￥
                                         <small>
-                                            <em class="esAmount">123</em>
+                                            <em class="esAmount">000</em>
                                         </small>
                                     </strong>
                                 </div>
@@ -128,7 +127,7 @@
                                 <div class="row  text-center text-muted">
                                     <strong>￥
                                         <small>
-                                            <em class="avAmount">123</em>
+                                            <em class="avAmount">000</em>
                                         </small>
                                     </strong>
                                 </div>

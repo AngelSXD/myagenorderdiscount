@@ -16,7 +16,7 @@ public class XxProductCategory {
     private String seoKeywords;
     private String seoTitle;
     private String treePath;
-    private XxProductCategory xxProductCategoryByParent;
+
 
     @Id
     @Column(name = "id", nullable = false, precision = 0)
@@ -153,16 +153,6 @@ public class XxProductCategory {
         result = 31 * result + (seoTitle != null ? seoTitle.hashCode() : 0);
         result = 31 * result + (treePath != null ? treePath.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "parent", referencedColumnName = "id")
-    public XxProductCategory getXxProductCategoryByParent() {
-        return xxProductCategoryByParent;
-    }
-
-    public void setXxProductCategoryByParent(XxProductCategory xxProductCategoryByParent) {
-        this.xxProductCategoryByParent = xxProductCategoryByParent;
     }
 
 
