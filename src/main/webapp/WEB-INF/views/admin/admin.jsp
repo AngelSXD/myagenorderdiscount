@@ -122,6 +122,7 @@
 <script src="../static/js/index/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="../static/js/index/custom.js"></script>
 <script src="../static/js/index/moment.min.js"></script>
+<script src="../static/js/notify.js"></script>
 <script src="../static/js/admin/admin.js"></script>
 </body>
 </html>

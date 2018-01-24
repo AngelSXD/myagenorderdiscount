@@ -31,18 +31,7 @@ $(document).ready(function(){
         console.log("选定时间段: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
     });
 
-    //机构信息
-    $.ajax({url:"../admin/getAdmin",
-        type:"post",
-        dataType:'json',
-        traditional:true,
-        success:function(data){
-            if(data != null && data != ""){
-                $(".adminId").text(data.id);
-                $(".adminName").text(data.name);
-            }
-        }
-    });
+
 
 
     //钱包信息
@@ -59,6 +48,43 @@ $(document).ready(function(){
             return ;
         }
     });
+
+
+
+    /**
+     * 查看预估订单和可提现订单
+     *
+     */
+    $(".checkEs,.checkAv").click(function(){
+        var currentValue = $(this).val();
+        $.ajax({url:"/runAc/checkDiscount",
+            type:"post",
+            traditional:true,
+            data:{currentValue:currentValue},
+            success:function(data){
+                $(".container-fluid").empty();
+                $(".container-fluid").append(data);
+            }
+        });
+    });
+
+    /**
+     * 查看订单历史和提现历史
+     *
+     */
+    $(".esDiscount,.history").click(function(){
+        var currentValue = $(this).attr("class");
+        $.ajax({url:"/runAc/checkDiscount",
+            type:"post",
+            traditional:true,
+            data:{currentValue:currentValue},
+            success:function(data){
+                $(".container-fluid").empty();
+                $(".container-fluid").append(data);
+            }
+        });
+    });
+
 
 
 });

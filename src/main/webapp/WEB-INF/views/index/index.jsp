@@ -32,6 +32,18 @@
         .ove{
             z-index: 1000;
         }
+        .modalIndex{
+            z-index: 999;
+        }
+        u,small strong{
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient:vertical;
+        }
     </style>
 </head>
 <body>
@@ -85,8 +97,8 @@
                         <a href="#"><i class="fa fa-diamond"></i><span>个人中心</span></a>
                         <div class="sidebar-submenu">
                             <ul>
-                                <li><a href="#" class="orderHistory">订单历史</a></li>
-                                <li><a href="#" class="discountHistory">提现历史</a></li>
+                                <li><a  class="esDiscount">订单历史</a></li>
+                                <li><a  class="history">提现历史</a></li>
                             </ul>
                         </div>
                     </li>
@@ -96,8 +108,8 @@
         </div><!-- sidebar-content  -->
 
         <div class="sidebar-footer">
-            <a href="#"><i class="fa fa-home"></i></a>
-            <a href="#"><i class="fa fa-power-off"></i></a>
+            <a href="indexHome?adminId=${admin.id}"><i class="fa fa-home"></i></a>
+            <a href="http://localhost:8080/admin/"><i class="fa fa-power-off"></i></a>
         </div>
     </nav><!-- sidebar-wrapper  -->
     <main class="page-content">
@@ -106,7 +118,7 @@
                 <h1>Myagen-admin's Wallet <span>reback form orderDiscount</span></h1>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-xs-6  col-sm-6  col-md-6 in">
+                        <div class="col-xs-6  col-sm-6  col-md-6 ">
                             <div class="well">
                                 <h3 class="text-success text-center">预估金额</h3>
                                 <div class="row  text-center text-muted">
@@ -117,11 +129,11 @@
                                     </strong>
                                 </div>
                                 <div class="row">
-                                    <button class="btn btn-success col-md-4 col-md-offset-4 col-xs-12 col-sm-12" type="button"><span class="hidden-xs hidden-sm">查看</span>详情</button>
+                                    <button class="btn btn-success col-md-4 col-md-offset-4 col-xs-12 col-sm-12 checkEs" type="button" value="esDiscount"><span class="hidden-xs hidden-sm">查看</span>详情</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6 in">
+                        <div class="col-xs-6 ">
                             <div class="well">
                                 <h3 class="text-warning text-center">可提<span class="hidden-xs hidden-sm">现</span>金额</h3>
                                 <div class="row  text-center text-muted">
@@ -132,7 +144,7 @@
                                     </strong>
                                 </div>
                                 <div class="row">
-                                    <button class="btn btn-warning col-md-4 col-md-offset-4 col-xs-12 col-sm-12" type="button"><span class="hidden-xs hidden-sm">流水/</span>提现</button>
+                                    <button class="btn btn-warning col-md-4 col-md-offset-4 col-xs-12 col-sm-12 checkAv" type="button" value="avDiscount"><span class="hidden-xs hidden-sm">流水/</span>提现</button>
                                 </div>
                             </div>
                         </div>
@@ -158,6 +170,7 @@
 <script src="static/js/index/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="static/js/index/custom.js"></script>
 <script src="static/js/index/moment.min.js"></script>
+<script src="../static/js/notify.js"></script>
 <script src="static/js/index/daterangepicker.js"></script>
 <script src="static/js/index/index.js"></script>
 </body>

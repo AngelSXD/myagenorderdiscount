@@ -33,6 +33,7 @@ public class RunningAccount {
     private String raId;
     /**
      * 流水账单编号
+     *
      */
     @Column(nullable = false,length = 100)
     private String raSn;
@@ -56,6 +57,11 @@ public class RunningAccount {
      */
     @Column(nullable = false)
     private Integer accountStatus;
+    /**
+     * 机构ID
+     */
+    @Column(nullable = false)
+    private Integer adminId;
     /**
      * 操作来源
      */

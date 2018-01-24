@@ -1,6 +1,7 @@
 package com.agen.orderdiscount.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @Entity
 @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator" )
+@JsonIgnoreProperties(value = {"parentRa"})
 public class AvAmount {
 
     /**
@@ -30,7 +32,7 @@ public class AvAmount {
     @javax.persistence.Id
     @GeneratedValue(generator = "uuid2")
     @Column(length = 36)
-    private String Id;
+    private String avId;
     /**
      * 本次转入可提现金额
      */
@@ -40,8 +42,9 @@ public class AvAmount {
      * 本条可提现金额记录 状态
      * 1    可提现
      * 2    请求提现，正在等待处理
-     * 3    已经成功转账，提现成功
-     * 4    不满足提现条件，被拒绝提现请求的
+     * 3    通过提现请求，等待到账
+     * 4    已经到账，提现成功
+     * 5    拒绝提现请求，不满足提现条件
      *
      */
     @Column(nullable = false)

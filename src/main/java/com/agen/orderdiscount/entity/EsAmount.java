@@ -25,7 +25,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @Entity
 @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator" )
-public class EsAmount {
+public class EsAmount implements Cloneable{
 
     /**
      * 预估ID
@@ -33,7 +33,7 @@ public class EsAmount {
     @Id
     @GeneratedValue(generator = "uuid2")
     @Column(length = 36)
-    private String Id;
+    private String esId;
     /**
      * 本次转入预估金额
      */
@@ -90,7 +90,10 @@ public class EsAmount {
     @Column(length = 500)
     private String esCre2;
 
-
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 
 

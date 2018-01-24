@@ -3,6 +3,7 @@ package com.agen.myagen.entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+
 @Entity
 @Table(name = "t_bg", schema = "dbo", catalog = "geneshop")
 public class TBg {

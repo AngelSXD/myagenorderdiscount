@@ -1,8 +1,12 @@
 package com.agen.controller;
 
+import com.agen.myagen.entity.TMemberCyb;
 import com.agen.myagen.entity.XxAdmin;
+import com.agen.myagen.entity.XxMember;
 import com.agen.myagen.entity.XxProduct;
 import com.agen.myagen.repository.AdminRepository;
+import com.agen.myagen.repository.MemberCybRepository;
+import com.agen.myagen.repository.MemberRepository;
 import com.agen.myagen.repository.ProductRepository;
 import com.agen.orderdiscount.entity.Discount;
 import com.agen.orderdiscount.entity.User;
@@ -51,6 +55,12 @@ public class AdminController {
 
     @Resource
     private DiscountRepository discountRepository;
+
+    @Resource
+    private MemberRepository memberRepository;
+
+    @Resource
+    private MemberCybRepository memberCybRepository;
 
     private AngelEncryption angelEncryption = new AngelEncryption();
 
@@ -332,5 +342,61 @@ public class AdminController {
 
         return "【机构】："+discount.getAdminName()+">>【产品】："+discount.getProductName()+"折扣信息更新失败";
     }
+
+
+
+    @RequestMapping("getAdminName")
+    @ResponseBody
+    public String getAdminName(Integer adminId){
+        if(Objects.nonNull(adminId)){
+            XxAdmin admin = adminRepository.findXxAdminById(adminId);
+            if(Objects.nonNull(admin)){
+                return admin.getName();
+            }
+        }
+
+        return "";
+    }
+
+    @RequestMapping("getProductName")
+    @ResponseBody
+    public String getProductName(Integer productId){
+        if(Objects.nonNull(productId)){
+            XxProduct product = productRepository.findXxProductById(productId);
+            if(Objects.nonNull(product)){
+                return product.getFullName();
+            }
+        }
+
+        return "";
+    }
+
+    @RequestMapping("getMemberName")
+    @ResponseBody
+    public String getMemberName(Integer memberId){
+        if(Objects.nonNull(memberId)){
+            XxMember member = memberRepository.findXxMemberById(memberId);
+            if(Objects.nonNull(member)){
+                return member.getUsername();
+            }
+        }
+
+        return  "";
+    }
+
+
+    @RequestMapping("getCybbm")
+    @ResponseBody
+    public String getCybbm(Integer cybId){
+        if(Objects.nonNull(cybId)){
+            TMemberCyb memberCyb = memberCybRepository.findTMemberCybById(cybId);
+            if(Objects.nonNull(memberCyb)){
+                return memberCyb.getCybbm();
+            }
+        }
+
+        return  "";
+    }
+
 
 }
