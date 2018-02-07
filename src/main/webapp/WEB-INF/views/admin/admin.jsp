@@ -80,6 +80,8 @@
                             <ul>
                                 <li><a href="#" class="baseInfo">基本信息</a></li>
                                 <li><a href="#" class="discountInfo">折扣管理</a></li>
+                                <li><a href="#" class="runningAccountInfo">流水管理</a></li>
+                                <li><a href="#" class="promocodeInfo">优惠券管理</a></li>
                             </ul>
                         </div>
                     </li>
@@ -100,6 +102,7 @@
                     <div class="row" >
                         <div class="col-lg-4 col-lg-offset-4 col-sm-12 col-md-12 col-xs-12">
                             <button class="button button-warning button--pipaluk btn-block discountInfo">折扣管理</button>
+                            <button class="button button-warning button--pipaluk btn-block runningAccountInfo">流水管理</button>
                         </div>
                     </div>
                 </div>
@@ -123,6 +126,7 @@
 <script src="../static/js/index/custom.js"></script>
 <script src="../static/js/index/moment.min.js"></script>
 <script src="../static/js/notify.js"></script>
+<script src="../static/js/publicFunction.js"></script>
 <script src="../static/js/admin/admin.js"></script>
 </body>
 </html>

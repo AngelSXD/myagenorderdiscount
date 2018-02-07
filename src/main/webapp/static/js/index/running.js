@@ -1,3 +1,5 @@
+var time = false;
+
 /**
  * 转化后台毫秒值 正常显示时间格式
  * @returns {string}
@@ -10,124 +12,16 @@ Date.prototype.toLocaleString = function() {
  * @param currentValue
  */
 function currentValueDeal(currentValue){
+    if("time" == currentValue){
+        time = true;
+        $(".currentValue").val("history");
+    }
     var textVal = $("li[role='presentation']  a[class="+currentValue+"] ").text();
     $("li[role='presentation'] a[class="+currentValue+"] ").html('<strong class="text-warning">'+textVal+'</strong>');
+    currentValue = $(".currentValue").val();
+    return currentValue;
 }
 
-/**
- * 获取机构Name
- * @param adminId
- */
-function getAdminName(adminId){
-    var adminName = "";
-    $.ajax({
-        url: "/admin/getAdminName",
-        type: "post",
-        traditional: true,
-        async: false,
-        data: {adminId:adminId},
-        success: function (data) {
-            adminName = data;
-        }
-    });
-
-    return adminName;
-}
-
-/**
- * 获取产品Name
- */
-function getProductName(productId){
-    var productName = "";
-
-    $.ajax({
-        url: "/admin/getProductName",
-        type: "post",
-        traditional: true,
-        async: false,
-        data: {productId:productId},
-        success: function (data) {
-            productName = data;
-        }
-    });
-
-    return productName;
-}
-
-/**
- * 获取会员姓名
- */
-function getMemberName(memberId){
-    var memberName = "";
-
-    $.ajax({
-        url: "/admin/getMemberName",
-        type: "post",
-        traditional: true,
-        async: false,
-        data: {memberId:memberId},
-        success: function (data) {
-            memberName = data;
-        }
-    });
-
-    return memberName;
-}
-
-/**
- * 获取cybbm
- */
-function getCybbm(cybId){
-    var cybbm = "";
-
-    $.ajax({
-        url: "/admin/getCybbm",
-        type: "post",
-        traditional: true,
-        async: false,
-        data: {cybId:cybId},
-        success: function (data) {
-            cybbm = data;
-        }
-    });
-
-    return cybbm;
-}
-
-/**
- * 处理 可提现订单 状态
- * @param status
- * @returns {string}
- */
-function getAvStatus(status){
-    var avStatus = "";
-    switch (status){
-        case 1:avStatus="可提现";break;
-        case 2:avStatus="请求提现，正在等待处理";break;
-        case 3:avStatus="通过提现请求，等待到账";break;
-        case 4:avStatus="已经到账，提现成功";break;
-        case 5:avStatus="拒绝提现请求，不满足提现条件";break;
-    }
-
-    return avStatus;
-}
-
-/**
- * 处理 流水账单 状态
- * @param status
- * @returns {string}
- */
-function getRaStatus(status){
-    var raStatus = "";
-    switch (status){
-        case 1:raStatus="请求提现";break;
-        case 2:raStatus="通过提现请求，提现成功";break;
-        case 3:raStatus="拒绝提现请求，提现失败";break;
-        case 4:raStatus="通过部分提现请求中的订单，拒绝部分提现请求中的订单";break;
-    }
-
-    return raStatus;
-}
 
 /**
  *
@@ -158,6 +52,11 @@ function get10Account(currentValue,oldMark){
     json.pageNumber = $("input[name='pageNumber']").val();
     json.pageSize = $("input[name='pageSize']").val();
     json.adminId = $(".adminId").text();
+    if(time == true){
+        json.startTime = startDate;
+        json.endTime = endDate;
+        time = false;
+    }
 
     $.ajax({
         url: url,
@@ -517,7 +416,7 @@ $(document).ready(function(){
 
     //设定标题特效
     var currentValue = $(".currentValue").val();
-    currentValueDeal(currentValue);
+    currentValue = currentValueDeal(currentValue);
     //页面初始化数据
     get10Account(currentValue,currentValue);
 
@@ -611,6 +510,35 @@ $(document).ready(function(){
             }
         }
 
+    });
+    //======================================确认到账=======================================
+    $(".confirm").click(function () {
+        var asId = $("#avdetailModal").find("input[name='avId']").val();
+        var orderSn = $("#avdetailModal").find(".orderSn").text();
+        var amountStatus = $("#avdetailModal").find("input[name='amountStatus']").val();
+        if(amountStatus == 3){
+            $.ajax({
+                url: "/runAc/confirm",
+                type: "post",
+                traditional: true,
+                async: false,
+                data: {asId:asId},
+                success: function (data) {
+                    if(data == "success"){
+                        notifyMsgSuccess("订单编号："+orderSn+"确认到账，操作成功");
+                    }else{
+                        notifyMsgError("订单编号："+orderSn+"确认到账，操作失败");
+                    }
+                    initData("avDiscount","avDiscount");
+                    $('#avdetailModal').modal('hide');
+
+                    return false;
+
+                }
+            });
+        }else{
+            notifyMsgWarning("操作无效,请确认当前状态是否可确认到账");
+        }
     });
 
     //======================================取消挂载=======================================

@@ -6,7 +6,7 @@
 	<groupId>com.agen</groupId>
 	<artifactId>myagenorderdiscount</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>myagenorderdiscount</name>
 	<description>Demo project for Spring Boot</description>
@@ -99,6 +99,18 @@
 			<artifactId>AngelKey</artifactId>
 			<version>1.1</version>
 		</dependency>
+		<!--RC4加密-->
+		<dependency>
+			<groupId>sxd.jar</groupId>
+			<artifactId>RC4</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<!--QR_Code二维码使用工具包-->
+		<dependency>
+			<groupId>sxd.jar</groupId>
+			<artifactId>QR_Code</artifactId>
+			<version>1.1</version>
+		</dependency>
 		<!--使用其类型转化的功能-->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -110,9 +122,22 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
+		<!-- google提供二维码生成和解析https://mvnrepository.com/artifact/com.google.zxing/core -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		<!--上传文件-->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.3</version>
+		</dependency>
 
 
-    </dependencies>
+
+	</dependencies>
 
 	<!--开启热部署-->
 	<build>

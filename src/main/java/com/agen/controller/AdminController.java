@@ -101,6 +101,7 @@ public class AdminController {
         return "admin/baseInfo";
     }
 
+
     /**
      * 修改过程中  验证原密码是否正确
      * @return
@@ -396,6 +397,36 @@ public class AdminController {
         }
 
         return  "";
+    }
+
+    /**
+     * 流水管理页面
+     * @return
+     */
+    @RequestMapping("runningAccountInfo")
+    public String runningAccountInfo(HttpServletRequest request){
+        User user = getCurrentUser(request);
+        if(user == null){
+            return "redirect:/";
+        }else{
+            return "admin/runningAccountInfo";
+        }
+
+    }
+
+    /**
+     * 优惠券管理页面
+     * @return
+     */
+    @RequestMapping("promocodeInfo")
+    public String promocodeInfo(HttpServletRequest request){
+        User user = getCurrentUser(request);
+        if(user == null){
+            return "redirect:/";
+        }else{
+            return "admin/promocodeInfo";
+        }
+
     }
 
 

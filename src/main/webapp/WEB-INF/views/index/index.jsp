@@ -80,6 +80,9 @@
                     </span>
                     <span class="user-role">Administrator</span>
                 </div>
+                <div>
+                    <button type="button" class="btn btn-warning btn-block btn-xs getPromo">获取专属优惠码</button>
+                </div>
             </div><!-- sidebar-header  -->
             <div class="sidebar-search">
                 <div>
@@ -165,13 +168,53 @@
 </div><!-- page-wrapper -->
 
 
+<div class="col-lg-8 col-lg-offset-2 col-sm-12 col-md-12 col-xs-12">
+    <div class="modal fade modalIndex" id="updateLogoModal"  role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-warning">上传机构LOGO</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form1" enctype="multipart/form-data" method="post" >
+                        <div class="">
+                            <label for="fileToUpload">Select a File to Upload</label>
+                            <h5 class="text-danger">请选择小于2M大小的jpg/png/bmp格式图片上传</h5>
+                            <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected()" class="btn btn-danger btn-block"/>
+                        </div>
+                        <div id="fileName"></div>
+                        <div id="fileSize"></div>
+                        <div id="fileType"></div>
+                        <div class="">
+                            <input type="button" class="btn btn-success btn-sm" style="width: 20%;" onclick="uploadFile()" value="上传" />
+                        </div>
+                        <div id="progressNumber"></div>
+                        <div class="pro"></div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%;min-width: 5px;">
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="static/bootstrap/js/jquery-1.11.0.min.js" type="text/javascript"></script>
 <script src="static/bootstrap/js/bootstrap.min.js"></script>
 <script src="static/js/index/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="static/js/index/custom.js"></script>
 <script src="static/js/index/moment.min.js"></script>
 <script src="../static/js/notify.js"></script>
+<script src="../static/js/publicFunction.js"></script>
 <script src="static/js/index/daterangepicker.js"></script>
+<script type="text/javascript" src="static/js/upload.js"></script>
 <script src="static/js/index/index.js"></script>
 </body>
 </html>

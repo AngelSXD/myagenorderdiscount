@@ -31,5 +31,37 @@ $(document).ready(function(){
         });
     });
 
+    /**
+     * 侧边菜单栏
+     * 流水管理
+     */
+    $(".runningAccountInfo").click(function(){
+        $.ajax({url:"admin/runningAccountInfo",
+            type:"post",
+            traditional:true,
+            success:function(data){
+                $(".container-fluid").empty();
+                $(".container-fluid").append(data);
+            }
+        });
+    });
+
+    /**
+     * 侧边菜单栏
+     * 优惠券管理
+     */
+    $(".promocodeInfo").click(function(){
+        $.ajax({url:"admin/promocodeInfo",
+            type:"post",
+            traditional:true,
+            success:function(data){
+                $(".container-fluid").empty();
+                $(".container-fluid").append(data);
+            }
+        });
+    });
+
+
+
 
 });

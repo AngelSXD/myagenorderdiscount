@@ -175,6 +175,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-danger cancelDiscount">取消挂载</button>
                     <button type="button" class="btn btn-primary canDiscount">挂载提现</button>
+                    <button type="button" class="btn btn-success confirm">确认到账</button>
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ import com.agen.orderdiscount.entity.RunningAccount;
 import com.agen.orderdiscount.repository.AvAmountRepository;
 import com.agen.orderdiscount.repository.EsAmountRepository;
 import com.agen.orderdiscount.repository.RunningAccountRepository;
+import com.agen.util.utils.DateUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 流水Controller
@@ -96,21 +98,24 @@ public class RunningAccountController {
     public Page<AvAmount> getAvAmount10(int pageNumber, int pageSize, Integer adminId){
 
         Pageable pageable = new PageRequest(pageNumber,pageSize);
-        Page<AvAmount> avAmountPages = avAmountRepository.findAll(new Specification<AvAmount>() {
-            @Override
-            public Predicate toPredicate(Root<AvAmount> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> list = new ArrayList<>();
-                if(Objects.nonNull(adminId)){
-                    list.add(criteriaBuilder.equal(root.get("adminId").as(Integer.class),adminId));
-                    criteriaQuery.orderBy(criteriaBuilder.desc(root.get("avDate")));
-                }
-                Predicate[] predicates = new Predicate[list.size()];
-                predicates = list.toArray(predicates);
-                return criteriaBuilder.and(predicates);
-            }
-        },pageable) ;
+        if(Objects.nonNull(adminId)){
+            Page<AvAmount> avAmountPages = avAmountRepository.findAll(new Specification<AvAmount>() {
+                @Override
+                public Predicate toPredicate(Root<AvAmount> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                    List<Predicate> list = new ArrayList<>();
 
-        return avAmountPages;
+                        list.add(criteriaBuilder.equal(root.get("adminId").as(Integer.class),adminId));
+                        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("avDate")));
+
+                    Predicate[] predicates = new Predicate[list.size()];
+                    predicates = list.toArray(predicates);
+                    return criteriaBuilder.and(predicates);
+                }
+            },pageable) ;
+
+            return avAmountPages;
+        }
+        return  null;
     }
 
     /**
@@ -122,25 +127,38 @@ public class RunningAccountController {
      */
     @RequestMapping("getRunningAccount10")
     @ResponseBody
-    public Page<RunningAccount> getRunningAccount10(int pageNumber, int pageSize, Integer adminId){
+    public Page<RunningAccount> getRunningAccount10(int pageNumber, int pageSize, Integer adminId,Long startTime,Long endTime){
 
         Pageable pageable = new PageRequest(pageNumber,pageSize);
-        Page<RunningAccount> runningAccountPages = runningAccountRepository.findAll(new Specification<RunningAccount>() {
-            @Override
-            public Predicate toPredicate(Root<RunningAccount> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> list = new ArrayList<>();
-                if(Objects.nonNull(adminId)){
-                    list.add(criteriaBuilder.equal(root.get("adminId").as(Integer.class),adminId));
-                    criteriaQuery.orderBy(criteriaBuilder.desc(root.get("raDate")));
-                }
-                Predicate[] predicates = new Predicate[list.size()];
-                predicates = list.toArray(predicates);
-                return criteriaBuilder.and(predicates);
-            }
-        },pageable) ;
+        if(Objects.nonNull(adminId)){
+            Page<RunningAccount> runningAccountPages = runningAccountRepository.findAll(new Specification<RunningAccount>() {
+                @Override
+                public Predicate toPredicate(Root<RunningAccount> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                    List<Predicate> list = new ArrayList<>();
 
-        return runningAccountPages;
+                        if(adminId != -1){
+                            list.add(criteriaBuilder.equal(root.get("adminId").as(Integer.class),adminId));
+                        }
+                        if(Objects.nonNull(startTime) && Objects.nonNull(endTime)){
+                            list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("raDate").as(Date.class),new Date(startTime)));
+                            list.add(criteriaBuilder.lessThanOrEqualTo(root.get("raDate").as(Date.class), DateUtils.getTomorrow(new Date(endTime))));
+                        }
+                        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("raDate")));
+
+                    Predicate[] predicates = new Predicate[list.size()];
+                    predicates = list.toArray(predicates);
+                    return criteriaBuilder.and(predicates);
+                }
+            },pageable) ;
+
+            return runningAccountPages;
+        }
+        return null;
     }
+
+
+
+
 
 
     /**
@@ -192,7 +210,7 @@ public class RunningAccountController {
             RunningAccount runningAccount1 = runningAccountRepository.save(runningAccount);
             if(Objects.nonNull(runningAccount)){
                 for (AvAmount avAmount : avAmountList) {
-                    avAmount.setParentRa(runningAccount1);
+                   avAmount.setParentRa(runningAccount1);
                 }
                 return map;
             }
@@ -202,6 +220,60 @@ public class RunningAccountController {
     }
 
 
+    @Transactional
+    @RequestMapping("changeRa")
+    @ResponseBody
+    public String changeRa(String raId,String[] avArr){
+        RunningAccount runningAccount = runningAccountRepository.findOne(raId);
+        Set<AvAmount> set = new HashSet<>();
+        if(Objects.nonNull(runningAccount)){
+            List<AvAmount> list = runningAccount.getChildAvamounts();
+            if(Objects.nonNull(list) && list.size() > 0 && avArr.length >0){
+                for (String s : avArr) {
+                    List<AvAmount> thisAs = list.stream().filter(a->s.equals(a.getAvId())).collect(Collectors.toList());
+                    if(Objects.nonNull(thisAs) && thisAs.size() == 1){
+                        AvAmount avAmount = thisAs.get(0);
+                        if(avAmount.getAmountStatus() == 2){
+                            avAmount.setAmountStatus(3);
+                            avAmount.setAvDate(new Date());
+                        }else{
+                            set.add(avAmount);
+                            continue;
+                        }
+                    }
+
+                }
+            }
+
+            if(Objects.nonNull(set) && set.size() >0){
+                return "error";
+            }else if(runningAccount.getAccountStatus() == 1){
+                for (int i=0;i<list.size();i++){
+                    avAmountRepository.saveAndFlush(list.get(i));
+                }
+                runningAccount.setAccountStatus(2);
+                runningAccount.setRaDate(new Date());
+                runningAccountRepository.saveAndFlush(runningAccount);
+                return  "success";
+            }
+
+        }
+        return "error";
+    }
+
+
+    @RequestMapping("confirm")
+    @ResponseBody
+    public String confirm(String asId){
+        AvAmount avAmount = avAmountRepository.findOne(asId);
+        if(Objects.nonNull(avAmount) && avAmount.getAmountStatus() == 3){
+            avAmount.setAmountStatus(4);
+            avAmount.setAvDate(new Date());
+            avAmountRepository.saveAndFlush(avAmount);
+            return "success";
+        }
+        return "error";
+    }
 
 
 }
