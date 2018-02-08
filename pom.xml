@@ -9,7 +9,7 @@
 	<packaging>war</packaging>
 
 	<name>myagenorderdiscount</name>
-	<description>Demo project for Spring Boot</description>
+	<description>myagen's Discount project for Spring Boot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -29,6 +29,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!--jsp页面使用jstl标签-->
@@ -150,6 +156,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>myagenDiscount</finalName>
 	</build>
 
 

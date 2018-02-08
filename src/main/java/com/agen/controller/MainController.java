@@ -15,6 +15,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,10 @@ import java.util.Objects;
 public class MainController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
+    @Value("${myagen.com.cn.domain}")
+    private String myagenDomain;
 
     @Resource
     private AdminRepository adminRepository;
@@ -79,7 +84,7 @@ public class MainController {
      */
     public boolean validate(String uuid){
         CloseableHttpClient closeableHttpClient =  HttpClientBuilder.create().build();
-        HttpGet httpGet = new HttpGet("http://localhost:8080/jms/validate2.jhtml?uuid="+uuid);
+        HttpGet httpGet = new HttpGet(myagenDomain+"jms/validate2.jhtml?uuid="+uuid);
 
         try {
             CloseableHttpResponse closeableHttpResponse = closeableHttpClient.execute(httpGet);
@@ -108,6 +113,7 @@ public class MainController {
                 Integer adminID = Integer.parseInt(adminId);
                 XxAdmin admin = adminRepository.findXxAdminById(adminID);
                 model.addAttribute("admin",admin);
+                model.addAttribute("myagenDomain",myagenDomain);
             }catch (Exception e){
                 StackTraceElement stackTraceElement = e.getStackTrace()[0];
                 String errorMsg = "文件名："+stackTraceElement.getFileName()+

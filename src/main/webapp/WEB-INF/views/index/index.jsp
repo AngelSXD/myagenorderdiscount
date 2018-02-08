@@ -112,7 +112,7 @@
 
         <div class="sidebar-footer">
             <a href="indexHome?adminId=${admin.id}"><i class="fa fa-home"></i></a>
-            <a href="http://localhost:8080/admin/"><i class="fa fa-power-off"></i></a>
+            <a href="${myagenDomain}admin/"><i class="fa fa-power-off"></i></a>
         </div>
     </nav><!-- sidebar-wrapper  -->
     <main class="page-content">
